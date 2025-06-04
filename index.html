@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-i18n="title">Αρχική Σελίδα</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- ✅ Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <a href="index.html">
+        <img src="images/Logo.jpg" alt="Logo" class="logo-img" />
+      </a>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html" data-i18n="nav.welcome">Καλωσήρθατε</a></li>
+        <li><a href="rooms.html" data-i18n="nav.rooms">Διαθέσιμα Δωμάτια</a></li>
+        <li><a href="about.html" class="active" data-i18n="nav.about">Σχετικά</a></li>
+        <li><a href="contact.html" data-i18n="nav.contact">Επικοινωνία</a></li>
+      </ul>
+    </nav>
+    <select onchange="setLanguage(this.value)" id="languageSelect">
+      <option value="el">Ελληνικά</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <!-- ✅ Bootstrap Carousel -->
+ <div id="welcomeCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="images/liotrivi 1.jpg" class="d-block w-100" alt="Φωτογραφία 1">
+        <div class="carousel-caption d-none d-md-block">
+          <h5 data-i18n="carousel.1.title">Καλωσορίσατε στο Studio Liotrivi</h5>
+          <p data-i18n="carousel.1.text">Ανακαλύψτε την άνεση και τη φιλοξενία.</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/liotrivi 2.jpg" class="d-block w-100" alt="Φωτογραφία 2">
+        <div class="carousel-caption d-none d-md-block">
+          <h5 data-i18n="carousel.2.text">Χαλαρώστε με θέα</h5>
+          <p data-i18n="carousel.2.text">Δωμάτια με μοναδική ατμόσφαιρα και θέα στη φύση.</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/liotrivi 3.jpg" class="d-block w-100" alt="Φωτογραφία 3">
+        <div class="carousel-caption d-none d-md-block">
+          <h5 data-i18n="carousel.3.text">Εύκολες Κρατήσεις</h5>
+          <p data-i18n="carousel.3.text">Μπείτε, διαλέξτε, κλείστε. Τόσο απλά.</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#welcomeCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#welcomeCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <!-- Hero section -->
+  <section class="hero">
+    <h1 data-i18n="hero.title">Περιηγηθείτε στα διαθέσιμα δωμάτια!</h1>
+    <p data-i18n="hero.subtitle">Κάντε κράτηση για το δωμάτιο που σας ταιριάζει, εύκολα και γρήγορα.</p>
+    <button onclick="window.location.href='rooms.html'" data-i18n="hero.button">
+      Δείτε Διαθέσιμα Δωμάτια
+    </button>
+  </section>
+
+  <footer>
+    <p data-i18n="footer.text">&copy; 2025 Hotel Booking | Όλα τα Δικαιώματα Διατηρούνται</p>
+  </footer>
+
+  <!-- 🌍 JavaScript για μεταφράσεις -->
+  <script>
+    const translations = {
+      el: {
+        title: "Αρχική Σελίδα",
+        "nav.welcome": "Καλωσήρθατε",
+        "nav.rooms": "Διαθέσιμα Δωμάτια",
+        "nav.contact": "Επικοινωνία",
+        "nav.login": "Σύνδεση",
+        "nav.about": "Σχετικά",
+        "hero.title": "Περιηγηθείτε στα διαθέσιμα δωμάτια!",
+        "hero.subtitle": "Κάντε κράτηση για το δωμάτιο που σας ταιριάζει, εύκολα και γρήγορα.",
+        "hero.button": "Δείτε Διαθέσιμα Δωμάτια",
+        "footer.text": "&copy; 2025 Hotel Booking | Όλα τα Δικαιώματα Διατηρούνται"
+      },
+      en: {
+        title: "Home Page",
+        "nav.welcome": "Welcome",
+        "nav.rooms": "Available Rooms",
+        "nav.contact": "Contact",
+        "nav.login": "Login",
+        "nav.about": "About",
+        "hero.title": "Browse available rooms!",
+        "hero.subtitle": "Book the room that suits you, easily and quickly.",
+        "hero.button": "View Available Rooms",
+        "carousel.1.title": "Welcome to Studio Liotrivi",
+        "carousel.1.text": "Discover comfort and hospitality.",
+        "carousel.2.title": "Relax with a view",
+        "carousel.2.text": "Rooms with unique atmosphere and nature views.",
+        "carousel.3.title": "Easy Reservations",
+        "carousel.3.text": "Log in, pick, book. That simple.",
+        "footer.text": "&copy; 2025 Hotel Booking | All Rights Reserved"
+      }
+    };
+
+    function setLanguage(lang) {
+      localStorage.setItem("preferredLanguage", lang);
+      applyTranslations(lang);
+      document.getElementById("languageSelect").value = lang;
+    }
+
+    function applyTranslations(lang) {
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const lang = localStorage.getItem("preferredLanguage") || "el";
+      setLanguage(lang);
+    });
+  </script>
+
+  <!-- ✅ Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

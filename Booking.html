@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="title">Κάντε Κράτηση - Studio Liotrivi</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <a href="index.html">
+        <img src="images/Logo.jpg" alt="Logo" class="logo-img" />
+      </a>
+      <nav>
+        <ul>
+          <li><a href="index.html" data-i18n="nav.welcome">Καλωσήρθατε</a></li>
+          <li><a href="rooms.html" data-i18n="nav.rooms">Διαθέσιμα Δωμάτια</a></li>
+          <li><a href="about.html" class="active" data-i18n="nav.about">Σχετικά</a></li>
+          <li><a href="contact.html" data-i18n="nav.contact">Επικοινωνία</a></li>
+        </ul>
+      </nav>
+      <select onchange="setLanguage(this.value)" id="languageSelect">
+        <option value="el">Ελληνικά</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+  </header>
+
+  <section id="booking">
+    <h2 data-i18n="booking.title">Κάντε Κράτηση</h2>
+    <form id="booking-form" class="booking-layout">
+      <div class="form-left">
+        <label for="room_id" data-i18n="booking.roomType">Τύπος Δωματίου:</label>
+        <select id="room_id" name="room_id" required></select>
+
+        <label for="name" data-i18n="booking.name">Ονοματεπώνυμο:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email" data-i18n="booking.email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="form-right">
+        <div class="dates">
+          <div>
+            <label for="checkin_date" data-i18n="booking.checkin">Ημερομηνία Άφιξης:</label>
+            <input type="date" id="checkin_date" name="checkin_date" required>
+          </div>
+          <div>
+            <label for="checkout_date" data-i18n="booking.checkout">Ημερομηνία Αναχώρησης:</label>
+            <input type="date" id="checkout_date" name="checkout_date" required>
+          </div>
+        </div>
+        <div class="submit-wrapper">
+          <button type="submit" data-i18n="booking.submit">Κάντε Κράτηση</button>
+        </div>
+      </div>
+    </form>
+    <div id="room-gallery" class="gallery"></div>
+  </section>
+
+  <footer>
+    <p data-i18n="footer.text">&copy; 2025 Hotel Booking | Όλα τα δικαιώματα διατηρούνται</p>
+  </footer>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" style="display: none;">
+    <span id="lightbox-close">&times;</span>
+    <img id="lightbox-img" src="" alt="Προβολή εικόνας" />
+    <div class="lightbox-controls">
+      <button id="prev-btn">&#10094;</button>
+      <button id="next-btn">&#10095;</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+  <script>
+    const translations = {
+      el: {
+        title: "Κάντε Κράτηση - Studio Liotrivi",
+        "nav.welcome": "Καλωσήρθατε",
+        "nav.rooms": "Διαθέσιμα Δωμάτια",
+        "nav.contact": "Επικοινωνία",
+        "nav.about": "Σχετικά",
+        "booking.title": "Κάντε Κράτηση",
+        "booking.roomType": "Τύπος Δωματίου:",
+        "booking.name": "Ονοματεπώνυμο:",
+        "booking.email": "Email:",
+        "booking.checkin": "Ημερομηνία Άφιξης:",
+        "booking.checkout": "Ημερομηνία Αναχώρησης:",
+        "booking.submit": "Κάντε Κράτηση",
+        "footer.text": "&copy; 2025 Hotel Booking | Όλα τα δικαιώματα διατηρούνται"
+      },
+      en: {
+        title: "Book Now - Studio Liotrivi",
+        "nav.welcome": "Welcome",
+        "nav.rooms": "Available Rooms",
+        "nav.contact": "Contact",
+        "nav.about": "About",
+        "booking.title": "Book a Room",
+        "booking.roomType": "Room Type:",
+        "booking.name": "Name:",
+        "booking.email": "Email:",
+        "booking.checkin": "Check-in Date:",
+        "booking.checkout": "Check-out Date:",
+        "booking.submit": "Book Now",
+        "footer.text": "&copy; 2025 Hotel Booking | All rights reserved"
+      }
+    };
+
+    function setLanguage(lang) {
+      localStorage.setItem("preferredLanguage", lang);
+      applyTranslations(lang);
+      document.getElementById("languageSelect").value = lang;
+    }
+
+    function applyTranslations(lang) {
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+      document.documentElement.lang = lang;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const lang = localStorage.getItem("preferredLanguage") || "el";
+      setLanguage(lang);
+    });
+  </script>
+ <script>
+    document.getElementById("booking-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+    
+      const form = e.target;
+      const data = {
+        room_id: form.room_id.value,
+        customer_name: form.name.value,
+        email: form.email.value,
+        check_in: form.checkin_date.value,
+        check_out: form.checkout_date.value
+      };
+    
+      try {
+        const response = await fetch("http://localhost:5000/bookings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+    
+        const result = await response.json();
+    
+        if (response.status === 201) {
+          alert("Η κράτησή σας καταχωρήθηκε. Παρακαλώ περιμένετε επιβεβαίωση από τον διαχειριστή.");
+          form.reset();
+        } else if (response.status === 409) {
+          alert("Το δωμάτιο δεν είναι διαθέσιμο για τις επιλεγμένες ημερομηνίες.");
+        } else {
+          alert("Σφάλμα: " + (result.error || "Άγνωστο σφάλμα"));
+        }
+      } catch (error) {
+        console.error("Σφάλμα:", error);
+        alert("Προέκυψε πρόβλημα κατά την αποστολή της φόρμας.");
+      }
+    });
+    </script>
+</body>
+</html>

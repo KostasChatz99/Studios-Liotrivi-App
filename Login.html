@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="title">Σύνδεση Ιδιοκτήτη</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">
+      <a href="index.html">
+        <img src="images/Logo.jpg" alt="Logo" class="logo-img" />
+      </a>
+    </div>
+    <select onchange="setLanguage(this.value)" id="languageSelect">
+      <option value="el">Ελληνικά</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <section class="login-form">
+    <h2 data-i18n="login.title">Σύνδεση Ιδιοκτήτη</h2>
+    <form id="loginForm">
+      <label for="email" data-i18n="login.email">Email:</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="password" data-i18n="login.password">Κωδικός:</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit" data-i18n="login.button">Σύνδεση</button>
+    </form>
+  </section>
+
+  <script>
+    // Translation strings
+    const translations = {
+      el: {
+        title: "Σύνδεση Ιδιοκτήτη",
+        "nav.welcome": "Καλωσήρθατε",
+        "nav.rooms": "Διαθέσιμα Δωμάτια",
+        "nav.contact": "Επικοινωνία",
+        "nav.login": "Σύνδεση",
+        "login.title": "Σύνδεση Ιδιοκτήτη",
+        "login.email": "Email:",
+        "login.password": "Κωδικός:",
+        "login.button": "Σύνδεση"
+      },
+      en: {
+        title: "Owner Login",
+        "nav.welcome": "Welcome",
+        "nav.rooms": "Available Rooms",
+        "nav.contact": "Contact",
+        "nav.login": "Login",
+        "login.title": "Owner Login",
+        "login.email": "Email:",
+        "login.password": "Password:",
+        "login.button": "Login"
+      }
+    };
+
+    function setLanguage(lang) {
+      localStorage.setItem("preferredLanguage", lang);
+      applyTranslations(lang);
+      document.getElementById("languageSelect").value = lang;
+    }
+
+    function applyTranslations(lang) {
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang] && translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+      document.documentElement.lang = lang;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const lang = localStorage.getItem("preferredLanguage") || "el";
+      setLanguage(lang);
+    });
+
+    // Login form handling
+    document.getElementById("loginForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = {
+        email: formData.get("email"),
+        password: formData.get("password")
+      };
+
+      try {
+        const response = await fetch("http://localhost:5000/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        let result;
+        try {
+          result = await response.json();
+        } catch (e) {
+          result = { message: "Άγνωστο σφάλμα από τον server." };
+        }
+
+        if (response.ok) {
+          localStorage.setItem("token", result.token);
+          window.location.href = "/admin_dashboard.html";
+        } else {
+          alert("Σφάλμα στην σύνδεση: " + result.message);
+        }
+      } catch (error) {
+        console.error("Σφάλμα:", error);
+        alert("Προέκυψε σφάλμα, παρακαλώ προσπαθήστε ξανά.");
+      }
+    });
+  </script>
+</body>
+</html>

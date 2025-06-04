@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Λεπτομέρειες Δωματίου</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+          <a href="index.html">
+            <img src="images/Logo.jpg" alt="Logo" class="logo-img" />
+          </a>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html" data-i18n="nav.welcome">Καλωσήρθατε</a></li>
+            <li><a href="rooms.html" data-i18n="nav.rooms">Διαθέσιμα Δωμάτια</a></li>
+            <li><a href="about.html" class="active" data-i18n="nav.about">Σχετικά</a></li>
+            <li><a href="contact.html" data-i18n="nav.contact">Επικοινωνία</a></li>
+          </ul>
+        </nav>
+        <select onchange="setLanguage(this.value)" id="languageSelect">
+          <option value="el">Ελληνικά</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+
+      <main class="room-detail-content">
+        <h2 id="room-name"></h2>
+      
+        <!-- Γενική περιγραφή για όλα τα δωμάτια -->
+        <p id="general-description">
+          Όλα μας τα δωμάτια είναι εξοπλισμένα με ανέσεις που θα σας κάνουν να νιώσετε σαν στο σπίτι σας.
+        </p>
+      
+        <!-- Συγκεκριμένη περιγραφή για το επιλεγμένο δωμάτιο -->
+        <p id="room-description"></p>
+        <p id="room-price"></p>
+        <a id="book-link" href="#">Κάντε Κράτηση</a>
+      
+        <div class="gallery" id="room-gallery"></div>
+
+    <script>
+    
+      const gallery = document.getElementById("room-gallery");
+    
+      // Υποθέτουμε max 5 εικόνες ανά δωμάτιο
+      for (let i = 1; i <= 5; i++) {
+        const imgPath = `images/room-${roomId}-${i}.jpg`;
+        const img = new Image();
+        img.src = imgPath;
+        img.alt = `Δωμάτιο ${roomId}`;
+        img.classList.add("gallery-image");
+    
+        // Μόνο αν φορτώνει επιτυχώς, το προσθέτουμε
+        img.onload = () => gallery.appendChild(img);
+      }
+    </script>
+  </main>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" style="display:none;">
+    <span id="lightbox-close">&times;</span>
+    <img id="lightbox-img" src="" alt="Μεγέθυνση Εικόνας">
+    <div class="lightbox-controls">
+      <button id="prev-btn">◀</button>
+      <button id="next-btn">▶</button>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const roomId = params.get("room_id");
+
+    let galleryImages = [];
+    let currentIndex = 0;
+
+      // 🟡 Περιγραφές για κάθε δωμάτιο
+  const roomDescriptions = {
+    "1": `<p>Απολαύστε τη διαμονή σας σε αυτό το άνετο και πλήρως εξοπλισμένο δίκλινο δωμάτιο, ιδανικό για ζευγάρια ή δύο άτομα. Το δωμάτιο βρίσκεται στο ισόγειο και προσφέρει εύκολη πρόσβαση χωρίς σκάλες.</p>
+<ul>
+  <li>Άνετο διπλό κρεβάτι ή δύο μονά (κατόπιν αιτήματος)</li>
+  <li>Κουζινάκι με ψυγείο, μάτια κουζίνας, νεροχύτη και βασικά σκεύη</li>
+  <li>Ιδιωτικό μπάνιο με ντους</li>
+  <li>Κλιματισμός & Wi-Fi</li>
+  <li>Ιδιωτική είσοδος</li>
+  <li>Καθαριότητα και φροντίδα με προσοχή στη λεπτομέρεια</li>
+</ul>
+<p>Σε κοντινή απόσταση θα βρείτε σούπερ μάρκετ, εστιατόρια και παραλία.</p>
+`,
+"2": `<p>Ζεστό και φωτεινό δίκλινο δωμάτιο, ιδανικό για ζευγάρια ή φίλους. Προσφέρει άνεση, αυτονομία και βρίσκεται στο ισόγειο για εύκολη πρόσβαση.</p>
+<ul>
+  <li>Διπλό κρεβάτι ή δύο μονά (κατόπιν αιτήματος)</li>
+  <li>Πλήρως εξοπλισμένο κουζινάκι με ψυγείο, σκεύη, νεροχύτη</li>
+  <li>Ιδιωτικό μπάνιο με ντους</li>
+  <li>Κλιματισμός, Wi-Fi & τηλεόραση</li>
+  <li>Καθημερινή καθαριότητα</li>
+  <li>Πρόσβαση σε αυλή ή εξωτερικό χώρο</li>
+</ul>
+<p>Κοντά σε παραλία, ταβέρνες και καταστήματα – ιδανική επιλογή για ξεκούραστες διακοπές.</p>`,
+    "3": `<p>Ευρύχωρο τετράκλινο δωμάτιο για οικογένειες ή παρέες, με κουζινάκι και άνετους χώρους. Βρίσκεται στο ισόγειο.</p>
+<ul>
+  <li>1 διπλό + 2 μονά ή 4 μονά κρεβάτια (κατόπιν αιτήματος)</li>
+  <li>Κουζινάκι με σκεύη και τραπέζι φαγητού</li>
+  <li>Ιδιωτικό μπάνιο με ντους</li>
+  <li>Κλιματισμός, Wi-Fi, τηλεόραση</li>
+  <li>Ιδιωτική είσοδος και πρόσβαση σε αυλή</li>
+  <li>Καθημερινή καθαριότητα</li>
+</ul>
+<p>Σε κοντινή απόσταση από παραλία, ταβέρνες και μίνι μάρκετ.</p>`,
+    "4": `<p>Φωτεινό και άνετο τρίκλινο δωμάτιο με μπαλκόνι και όμορφη θέα. Βρίσκεται στον 1ο όροφο – ιδανικό για ζευγάρια με παιδί.</p>
+<ul>
+  <li>1 διπλό + 1 μονό ή 3 μονά κρεβάτια</li>
+  <li>Κουζινάκι με σκεύη & τραπέζι</li>
+  <li>Μπαλκόνι με θέα (σε αυλή/θάλασσα/βουνό)</li>
+  <li>Ιδιωτικό μπάνιο με ντους</li>
+  <li>Κλιματισμός, Wi-Fi, τηλεόραση</li>
+  <li>Καθαριότητα & οικογενειακό περιβάλλον</li>
+</ul>
+<p>Ιδανική τοποθεσία για άνετες και ευχάριστες διακοπές.</p>`,
+    "5": `<p>Ευρύχωρο και φωτεινό δωμάτιο στον 1ο όροφο για έως 5 άτομα, με μπαλκόνι και υπέροχη θέα – τέλειο για οικογένειες ή παρέες.</p>
+<ul>
+  <li>1 διπλό + 3 μονά ή άλλη διάταξη</li>
+  <li>Κουζινάκι με βασικά σκεύη και τραπέζι φαγητού</li>
+  <li>Ιδιωτικό μπάνιο με ντους</li>
+  <li>Κλιματισμός, Wi-Fi, τηλεόραση</li>
+  <li>Ιδιωτικό μπαλκόνι με θέα</li>
+  <li>Καθημερινή φροντίδα & καθαριότητα</li>
+</ul>
+<p>Τοποθεσία κοντά σε παραλία, αγορά και ταβέρνες.</p>`,
+    "6": `<p>Δίκλινο δωμάτιο με μαγευτική θέα στο Αιγαίο, ιδανικό για ζευγάρια ή φίλους. Βρίσκεται στον 1ο όροφο με ιδιωτικό μπαλκόνι.</p>
+<ul>
+  <li>Διπλό ή δύο μονά κρεβάτια</li>
+  <li>Κουζινάκι με σκεύη & τραπεζάκι φαγητού</li>
+  <li>Ιδιωτικό μπάνιο με ντους</li>
+  <li>Κλιματισμός, Wi-Fi, τηλεόραση</li>
+  <li>Μπαλκόνι με ανεμπόδιστη θέα στη θάλασσα</li>
+  <li>Καθημερινή καθαριότητα</li>
+</ul>
+<p>Ήσυχη τοποθεσία, κοντά σε παραλίες, καταστήματα και εστιατόρια.</p>`,
+    "7": `Room 7:
+html
+Αντιγραφή
+Επεξεργασία
+<p>Φωτεινό δίκλινο δωμάτιο με ιδιωτικό μπαλκόνι και θέα στη θάλασσα. Ιδανικό για ρομαντικές και ήρεμες διακοπές.</p>
+<ul>
+  <li>1 διπλό ή 2 μονά (κατόπιν αιτήματος)</li>
+  <li>Κουζινάκι με σκεύη και τραπέζι φαγητού</li>
+  <li>Μπαλκόνι με θέα στη θάλασσα</li>
+  <li>Κλιματισμός, Wi-Fi, τηλεόραση</li>
+  <li>Καθημερινή φροντίδα & καθαριότητα</li>
+</ul>
+<p>Βρίσκεται κοντά σε παραλία, εστιατόρια και μαγαζιά.</p>`,
+    "8": `<p>Ολόκληρο ισόγειο κατάλυμα για έως 6 άτομα, με πλήρως εξοπλισμένη κουζίνα και άνετο καθιστικό – σαν στο σπίτι σας.</p>
+<ul>
+  <li>2 ξεχωριστοί χώροι ύπνου (1 διπλό + 3 μονά ή άλλος συνδυασμός)</li>
+  <li>Κουζίνα με σκεύη, καφετιέρα, βραστήρα, κτλ.</li>
+  <li>Ιδιωτικό μπάνιο με ντους ή μπανιέρα</li>
+  <li>Καθιστικό ή ενιαίος χώρος τραπεζαρίας</li>
+  <li>Κλιματισμός, Wi-Fi, τηλεόραση</li>
+  <li>Ιδιωτική είσοδος και αυλή/κήπος</li>
+  <li>Δωρεάν πάρκινγκ</li>
+</ul>
+<p>Σε ήσυχη περιοχή κοντά σε παραλία, μαγαζιά και εστιατόρια.</p>`
+    // ➕ Πρόσθεσε κι άλλα όπως χρειάζεται
+  };
+
+    fetch("http://localhost:5000/rooms")
+      .then(res => res.json())
+      .then(rooms => {
+        const room = rooms.find(r => r.id == roomId);
+        if (room) {
+            document.getElementById("room-name").textContent = room.name;
+            document.getElementById("room-description").innerHTML =
+            roomDescriptions[roomId] || "Δεν υπάρχει περιγραφή για αυτό το δωμάτιο.";
+            document.getElementById("room-price").textContent = `Τιμή: ${room.price}€`;
+            document.getElementById("book-link").href = `booking.html?room_id=${room.id}`;
+        }
+      });
+
+    fetch(`http://localhost:5000/rooms/${roomId}/images`)
+      .then(res => res.json())
+      .then(images => {
+        galleryImages = images;
+        const gallery = document.getElementById("room-gallery");
+        gallery.innerHTML = "";
+
+        images.forEach((img, index) => {
+          const imgEl = document.createElement("img");
+          imgEl.src = img.image_url;
+          imgEl.classList.add("gallery-image");
+          imgEl.addEventListener("click", () => {
+            document.getElementById("lightbox-img").src = img.image_url;
+            currentIndex = index;
+            document.getElementById("lightbox").style.display = "flex";
+          });
+          gallery.appendChild(imgEl);
+        });
+      });
+
+    document.getElementById("lightbox-close").addEventListener("click", () => {
+      document.getElementById("lightbox").style.display = "none";
+    });
+
+    document.getElementById("prev-btn").addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+      document.getElementById("lightbox-img").src = galleryImages[currentIndex].image_url;
+    });
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % galleryImages.length;
+      document.getElementById("lightbox-img").src = galleryImages[currentIndex].image_url;
+    });
+  </script>
+</body>
+  <footer>
+    <p data-i18n="footer.text">&copy; 2025 Hotel Booking | Όλα τα δικαιώματα διατηρούνται</p>
+  </footer>
+  <script>
+  const translations = {
+    en: {
+      "nav.welcome": "Welcome",
+      "nav.rooms": "Available Rooms",
+      "nav.about": "About",
+      "nav.contact": "Contact",
+      "booking.name": "Full Name",
+      "general.description": "All our rooms are equipped with amenities to make you feel at home.",
+      "book-now": "Book Now",
+      "room.price": "Price",
+    },
+    el: {
+      "nav.welcome": "Καλωσήρθατε",
+      "nav.rooms": "Διαθέσιμα Δωμάτια",
+      "nav.about": "Σχετικά",
+      "nav.contact": "Επικοινωνία",
+      "booking.name": "Ονοματεπώνυμο",
+      "general.description": "Όλα μας τα δωμάτια είναι εξοπλισμένα με ανέσεις που θα σας κάνουν να νιώσετε σαν στο σπίτι σας.",
+      "book-now": "Κάντε Κράτηση",
+      "room.price": "Τιμή",
+    }
+  };
+
+  function setLanguage(lang) {
+    localStorage.setItem("lang", lang);
+    applyTranslations(lang);
+  }
+
+  function applyTranslations(lang) {
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      const key = el.getAttribute("data-i18n");
+      if (translations[lang] && translations[lang][key]) {
+        el.textContent = translations[lang][key];
+      }
+    });
+
+    // Μη αυτόματο update σε δυναμικά περιεχόμενα
+    const generalDescription = document.getElementById("general-description");
+    if (lang === "en") {
+      generalDescription.textContent = translations.en["general.description"];
+    } else {
+      generalDescription.textContent = translations.el["general.description"];
+    }
+
+    // Αν έχεις roomDescriptions σε δύο γλώσσες, κάνε εδώ την αλλαγή τους
+  }
+
+  // Apply selected language on page load
+  const savedLang = localStorage.getItem("lang") || "el";
+  document.getElementById("languageSelect").value = savedLang;
+  document.addEventListener("DOMContentLoaded", () => {
+    applyTranslations(savedLang);
+  });
+</script>
+
+</html>

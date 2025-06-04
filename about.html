@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="about.title">Σχετικά με το Studio Liotrivi</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a href="index.html"><img src="images/Logo.jpg" class="logo-img" alt="Logo" /></a>
+    <nav>
+      <ul>
+        <li><a href="index.html" data-i18n="nav.welcome">Καλωσήρθατε</a></li>
+        <li><a href="rooms.html" data-i18n="nav.rooms">Διαθέσιμα Δωμάτια</a></li>
+        <li><a href="about.html" class="active" data-i18n="nav.about">Σχετικά</a></li>
+        <li><a href="contact.html" data-i18n="nav.contact">Επικοινωνία</a></li>
+      </ul>
+    </nav>
+    <select onchange="setLanguage(this.value)" id="languageSelect">
+      <option value="el">Ελληνικά</option>
+      <option value="en">English</option>
+    </select>
+  </header>
+
+  <main class="about-container">
+    <h1 data-i18n="about.title">Σχετικά με το Studio Liotrivi</h1>
+    <p data-i18n="about.description">
+      Τα Studios Liotrivi ξεκίνησαν να λειτουργούν το 2015. Το κατάλυμα αποτελείται από 8 ευρύχωρα και πλήρως εξοπλισμένα διαμερίσματα, τα οποία διαθέτουν μία φανταστική θέα στη θάλασσα. Βρισκόμαστε στα 150 μέτρα από τον Πύργο της Ουρανούπολης καθώς και το λιμάνι, 3 λεπτά περίπου από το κέντρο του χωριού.
+
+      Κάθε ένα δωμάτιο ξεχωριστά διαθέτει μπάνιο, μικρή ατομική κουζίνα, Air Condition, τηλεόραση LCD, ψυγείο, καθώς και δωρεάν WiFi.
+    </p>
+
+    <h2 data-i18n="about.photos">📸 Φωτογραφίες</h2>
+    <div class="slider">
+      <button class="prev" onclick="changeSlide(-1)">❮</button>
+      <div class="slides">
+        <img src="images/liotrivi 1.jpg" alt="Εξωτερικός χώρος" />
+        <img src="images/liotrivi 2.jpg" alt="Αυλή" />
+        <img src="images/liotrivi 3.jpg" alt="Δωμάτιο" />
+        <img src="images/home 1.jpg" alt="Θέα" />
+        <img src="images/room 1-1.jpg" alt="Θέα" />
+        <img src="images/room 4-1.jpg" alt="Θέα" />
+        <img src="images/room 4-4.jpg" alt="Θέα" />
+        <img src="images/room 5.jpg" alt="Θέα" />
+        <img src="images/room 3-4.jpg" alt="Θέα" />
+        <img src="images/room 3-5.jpg" alt="Θέα" />
+        <img src="images/room 2-1.jpg" alt="Θέα" />
+      </div>
+      <button class="next" onclick="changeSlide(1)">❯</button>
+    </div>
+
+    <section class="amenities">
+      <h2 data-i18n="about.amenities">✨ Παροχές</h2>
+      <ul class="amenities-list">
+        <li data-i18n="about.amenities.comfort">🛏️ Άνετα Δωμάτια</li>
+        <li data-i18n="about.amenities.wifi">📶 Δωρεάν Wi-Fi</li>
+        <li data-i18n="about.amenities.breakfast">☕ Πρωινό κατόπιν ζήτησης</li>
+        <li data-i18n="about.amenities.parking">🚗 Ιδιωτικό Πάρκινγκ</li>
+        <li data-i18n="about.amenities.view">🌅 Θέα στη Θάλασσα</li>
+      </ul>
+    </section>
+
+    <section class="faq-section">
+      <h2 data-i18n="about.faq">❓ Συχνές Ερωτήσεις</h2>
+
+      <div class="faq-item">
+        <h3 data-i18n="faq.checkin.q">Τι ώρα είναι το check-in;</h3>
+        <p data-i18n="faq.checkin.a">Από τις 14:00 έως τις 22:00</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 data-i18n="faq.breakfast.q">Προσφέρετε πρωινό;</h3>
+        <p data-i18n="faq.breakfast.a">Ναι, προσφέρουμε παραδοσιακό πρωινό με τοπικά προϊόντα κατόπιν ζήτησης.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 data-i18n="faq.pets.q">Επιτρέπονται τα κατοικίδια;</h3>
+        <p data-i18n="faq.pets.a">Μικρόσωμα κατοικίδια είναι ευπρόσδεκτα, με προηγούμενη ενημέρωση.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 data-i18n="faq.parking.q">Υπάρχει χώρος στάθμευσης;</h3>
+        <p data-i18n="faq.parking.a">Ναι, διαθέτουμε δωρεάν ιδιωτικό πάρκινγκ.</p>
+      </div>
+    </section>
+
+    <div style="margin-top: 20px;">
+      <button onclick="window.location.href='rooms.html'" data-i18n="hero.button">Δείτε τα δωμάτια</button>
+    </div>
+  </main>
+
+  <footer>
+    <p data-i18n="footer.text">&copy; 2025 Studio Liotrivi | Όλα τα δικαιώματα διατηρούνται</p>
+  </footer>
+
+  <script>
+    const translations = {
+      el: {
+        "about.title": "Σχετικά με το Studio Liotrivi",
+        "about.description": `Τα Studios Liotrivi ξεκίνησαν να λειτουργούν το 2015. Το κατάλυμα αποτελείται από 8 ευρύχωρα και πλήρως εξοπλισμένα διαμερίσματα, τα οποία διαθέτουν μία φανταστική θέα στη θάλασσα. Βρισκόμαστε στα 150 μέτρα από τον Πύργο της Ουρανούπολης καθώς και το λιμάνι, 3 λεπτά περίπου από το κέντρο του χωριού.
+
+Κάθε ένα δωμάτιο ξεχωριστά διαθέτει μπάνιο, μικρή ατομική κουζίνα, Air Condition, τηλεόραση LCD, ψυγείο, καθώς και δωρεάν WiFi.`,
+        "about.photos": "📸 Φωτογραφίες",
+        "about.amenities": "✨ Παροχές",
+        "about.amenities.comfort": "🛏️ Άνετα Δωμάτια",
+        "about.amenities.wifi": "📶 Δωρεάν Wi-Fi",
+        "about.amenities.breakfast": "☕ Πρωινό κατόπιν ζήτησης",
+        "about.amenities.parking": "🚗 Ιδιωτικό Πάρκινγκ",
+        "about.amenities.view": "🌅 Θέα στη Θάλασσα",
+        "about.faq": "❓ Συχνές Ερωτήσεις",
+        "faq.checkin.q": "Τι ώρα είναι το check-in;",
+        "faq.checkin.a": "Από τις 14:00 έως τις 22:00",
+        "faq.breakfast.q": "Προσφέρετε πρωινό;",
+        "faq.breakfast.a": "Ναι, προσφέρουμε παραδοσιακό πρωινό με τοπικά προϊόντα κατόπιν ζήτησης.",
+        "faq.pets.q": "Επιτρέπονται τα κατοικίδια;",
+        "faq.pets.a": "Μικρόσωμα κατοικίδια είναι ευπρόσδεκτα, με προηγούμενη ενημέρωση.",
+        "faq.parking.q": "Υπάρχει χώρος στάθμευσης;",
+        "faq.parking.a": "Ναι, διαθέτουμε δωρεάν ιδιωτικό πάρκινγκ.",
+        "footer.text": "&copy; 2025 Studio Liotrivi | Όλα τα δικαιώματα διατηρούνται",
+        "hero.button": "Δείτε τα δωμάτια",
+        "nav.welcome": "Καλωσήρθατε",
+        "nav.rooms": "Διαθέσιμα Δωμάτια",
+        "nav.about": "Σχετικά",
+        "nav.contact": "Επικοινωνία"
+      },
+      en: {
+        "about.title": "About Studio Liotrivi",
+        "about.description": `Studios Liotrivi opened in 2015. The property consists of 8 spacious and fully equipped apartments with fantastic sea views. We are located 150 meters from the Tower of Ouranoupoli and the harbor, about 3 minutes from the village center.
+
+Each room features a bathroom, small kitchenette, Air Conditioning, LCD TV, refrigerator, and free WiFi.`,
+        "about.photos": "📸 Photos",
+        "about.amenities": "✨ Amenities",
+        "about.amenities.comfort": "🛏️ Comfortable Rooms",
+        "about.amenities.wifi": "📶 Free Wi-Fi",
+        "about.amenities.breakfast": "☕ Breakfast on request",
+        "about.amenities.parking": "🚗 Private Parking",
+        "about.amenities.view": "🌅 Sea View",
+        "about.faq": "❓ Frequently Asked Questions",
+        "faq.checkin.q": "What time is check-in?",
+        "faq.checkin.a": "From 14:00 to 22:00",
+        "faq.breakfast.q": "Do you offer breakfast?",
+        "faq.breakfast.a": "Yes, we offer traditional breakfast with local products on request.",
+        "faq.pets.q": "Are pets allowed?",
+        "faq.pets.a": "Small pets are welcome with prior notice.",
+        "faq.parking.q": "Is parking available?",
+        "faq.parking.a": "Yes, we provide free private parking.",
+        "footer.text": "&copy; 2025 Studio Liotrivi | All rights reserved",
+        "hero.button": "View Rooms",
+        "nav.welcome": "Welcome",
+        "nav.rooms": "Available Rooms",
+        "nav.about": "About",
+        "nav.contact": "Contact"
+      }
+    };
+
+    function setLanguage(lang) {
+      localStorage.setItem("preferredLanguage", lang);
+      applyTranslations(lang);
+      document.getElementById("languageSelect").value = lang;
+    }
+
+    function applyTranslations(lang) {
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang] && translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+      if (translations[lang] && translations[lang]["about.title"]) {
+        document.title = translations[lang]["about.title"];
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const lang = localStorage.getItem("preferredLanguage") || "el";
+      setLanguage(lang);
+    });
+
+    let currentSlide = 0;
+    function changeSlide(direction) {
+      const slides = document.querySelector(".slides");
+      const total = slides.children.length;
+      currentSlide = (currentSlide + direction + total) % total;
+      slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    setInterval(() => {
+      changeSlide(1);
+    }, 4000);
+  </script>
+</body>
+</html>

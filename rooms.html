@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="title">Διαθέσιμα Δωμάτια - Studio Liotrivi</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header>
+    <div class="navbar">
+      <a href="index.html">
+        <img src="images/Logo.jpg" alt="Logo" class="logo-img" />
+      </a>
+      <nav>
+        <ul>
+          <li><a href="index.html" data-i18n="nav.welcome">Καλωσήρθατε</a></li>
+          <li><a href="rooms.html" data-i18n="nav.rooms">Διαθέσιμα Δωμάτια</a></li>
+          <li><a href="about.html" class="active" data-i18n="nav.about">Σχετικά</a></li>
+          <li><a href="contact.html" data-i18n="nav.contact">Επικοινωνία</a></li>
+        </ul>
+      </nav>
+      <select onchange="setLanguage(this.value)" id="languageSelect">
+        <option value="el">Ελληνικά</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+  </header>
+
+  <section id="rooms" class="rooms-section">
+    <h2 data-i18n="rooms.title">Διαθέσιμα Δωμάτια</h2>
+      <label for="check-in" data-i18n="rooms.checkin">Άφιξη:</label>
+      <input type="date" id="check-in" name="check-in" required>
+
+      <label for="check-out" data-i18n="rooms.checkout">Αναχώρηση:</label>
+      <input type="date" id="check-out" name="check-out" required>
+
+      <label for="guests" data-i18n="rooms.guests">Άτομα:</label>
+      <input type="number" id="guests" name="guests" min="1" required>
+
+      <button id="search-btn" type="button" data-i18n="rooms.search">🔍 Αναζήτηση Διαθεσιμότητας</button>
+    
+    <div id="rooms-container">
+      <!-- Εδώ θα φορτώνονται δυναμικά τα δωμάτια από το API -->
+    </div>
+  </section>
+
+  <footer>
+    <p data-i18n="footer.text">&copy; 2025 Hotel Booking | Όλοι οι Δικαιώματα Διατηρούνται</p>
+  </footer>
+
+  <!-- Μεταφράσεις -->
+  <script>
+    const translations = {
+      el: {
+        title: "Διαθέσιμα Δωμάτια - Studio Liotrivi",
+        "nav.welcome": "Καλωσήρθατε",
+        "nav.rooms": "Διαθέσιμα Δωμάτια",
+        "nav.contact": "Επικοινωνία",
+        "nav.login": "Σύνδεση",
+        "nav.about": "Σχετικά",
+        "rooms.title": "Διαθέσιμα Δωμάτια",
+        "rooms.checkin": "Άφιξη:",
+        "rooms.checkout": "Αναχώρηση:",
+        "rooms.guests": "Άτομα:",
+        "rooms.search": "🔍 Αναζήτηση Διαθεσιμότητας",
+        "rooms.noRooms": "❌ Δεν υπάρχουν διαθέσιμα δωμάτια.",
+        "rooms.fillAll": "Συμπλήρωσε σωστά όλα τα πεδία!",
+        "rooms.searchError": "Παρουσιάστηκε σφάλμα κατά την αναζήτηση.",
+        "footer.text": "&copy; 2025 Hotel Booking | Όλοι οι Δικαιώματα Διατηρούνται"
+      },
+      en: {
+        title: "Available Rooms - Studio Liotrivi",
+        "nav.welcome": "Welcome",
+        "nav.rooms": "Available Rooms",
+        "nav.contact": "Contact",
+        "nav.login": "Login",
+        "nav.about": "About",
+        "rooms.title": "Available Rooms",
+        "rooms.checkin": "Check-in:",
+        "rooms.checkout": "Check-out:",
+        "rooms.guests": "Guests:",
+        "rooms.search": "🔍 Search Availability",
+        "rooms.noRooms": "❌ No available rooms.",
+        "rooms.fillAll": "Please fill in all fields correctly!",
+        "rooms.searchError": "An error occurred during search.",
+        "footer.text": "&copy; 2025 Hotel Booking | All Rights Reserved"
+      }
+    };
+
+    function setLanguage(lang) {
+      localStorage.setItem("preferredLanguage", lang);
+      applyTranslations(lang);
+      document.getElementById("languageSelect").value = lang;
+    }
+
+    function applyTranslations(lang) {
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+  const searchBtn = document.getElementById("search-btn");
+
+  if (searchBtn) {
+    searchBtn.addEventListener("click", async () => {
+      const checkIn = document.getElementById("check-in").value;
+      const checkOut = document.getElementById("check-out").value;
+      const guests = parseInt(document.getElementById("guests").value, 10);
+
+      console.log("➡️ checkIn:", checkIn);
+      console.log("➡️ checkOut:", checkOut);
+      console.log("➡️ guests:", guests);
+
+      if (!checkIn || !checkOut || isNaN(guests)) {
+        alert(translations[lang]["rooms.fillAll"] || "Please fill all fields correctly!");
+        return;
+      }
+
+      try {
+        const res = await fetch(`http://localhost:5000/bookings/available-rooms?check_in=${checkIn}&check_out=${checkOut}&people=${guests}`);
+        const availableRooms = await res.json();
+
+        console.log("📦 Αποτελέσματα:", availableRooms);
+
+        const container = document.getElementById("rooms-container");
+        container.innerHTML = "";
+
+        if (!Array.isArray(availableRooms) || availableRooms.length === 0) {
+          container.innerHTML = `<p>${translations[lang]["rooms.noRooms"] || "No available rooms."}</p>`;
+          return;
+        }
+
+        availableRooms.forEach(room => {
+          const roomDiv = document.createElement("div");
+          roomDiv.classList.add("room");
+          roomDiv.innerHTML = `
+            <a href="room-details.html?room_id=${room.id}">
+              <img src="images/${room.image}" alt="${room.name}">
+            </a>
+            <div class="room-details">
+              <h3>${room.name}</h3>
+              <p>Χωρητικότητα: ${room.capacity} άτομα</p>
+              <p>Τιμή: ${room.price}€</p>
+              <a href="booking.html?room_id=${room.id}">Κάντε Κράτηση</a>
+            </div>
+          `;
+          container.appendChild(roomDiv);
+        });
+      } catch (err) {
+        console.error("Σφάλμα κατά την αναζήτηση:", err);
+        alert(translations[lang]["rooms.searchError"] || "Error during search.");
+      }
+    });
+  }
+});
+
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
